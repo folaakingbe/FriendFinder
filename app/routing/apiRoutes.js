@@ -8,19 +8,26 @@ module.exports = function (app) {
 
     app.post("/api/friends", function(req, res) {
         console.log("there");
-        friends.push(req.body);
+        var newFriend = req.body;
         console.log("-------------------------");
-        console.log(req.body);
+        console.log(Object.getOwnPropertyNames(req.body));
         console.log("-------------------------");
         console.log(friends);
+
         var score = 100;
         var index = -1;
         var tempIndex = 0;
-        var user = req.body;
+        var user = [];
+        var tempUser = req.body.scores.split("");
+        tempUser.forEach(function(choice) {
+            user.push(parseInt(choice));
+        })
+        console.log(user);
         friends.forEach(function(friend) {
             var answers = 0;
             for (var i = 0; i < 10; i++) {
-                answers += Math.abs(user[i] - friend.scores[i]);
+                var otherUser = friend.scores;
+                answers += Math.abs(user[i] - otherUser[i]);
             }
             if (answers < score) {
                 score = answers;
@@ -28,6 +35,8 @@ module.exports = function (app) {
             }
             tempIndex++;
         })
+        newFriend.scores = user;
+        friends.push(newFriend);
         res.json(friends[index]);
     })
 //         for (var i = 0; i < 10; i++) {

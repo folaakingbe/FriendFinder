@@ -198,7 +198,7 @@
                             <p></p>
                         </div>
                         <div id="friend-photo">
-                            <a href=""></a>
+                            <img src-""></img>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -278,15 +278,16 @@
                 var friend = {
                     name: $("#user-name").val(),
                     photo: $("#user-photo").val(),
-                    scores: score
+                    scores: score.join("")
                 };
                 console.log("-------------------------");
-                console.log(friend);
+                console.log(Object.getOwnPropertyNames(friend));
                 console.log("-------------------------");
                 $.post("/api/friends", friend, function(data) {
                     console.log("here");
                     document.getElementById("friend-name").innerHTML = data.name;
-                    document.getElementById("friend-photo").href = data.photo;
+                    document.getElementById("friend-photo").src = data.photo;
+                    console.log(data.photo);
                     $("#myModal").modal('show');
                 })
             }
