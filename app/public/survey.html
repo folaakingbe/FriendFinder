@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tables Page</title>
+  <title>Friend Finder</title>
 
   <!-- Latest compiled and minified CSS & JS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <!-- Survey Questions -->
     <div class="container">
         <h1>Survey Questions</h1>
         <hr>
@@ -33,10 +34,6 @@
         <h2>Question 1</h2>
         <p>You like to play video games.</p>
         <div>
-            <!-- <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                  Dropdown
-                  <span class="caret"></span>
-            </button> -->
             <div class="form-group">
                 <label for="exampleFormControlSelect2"></label>
                 <select id="question1" class="form-control" id="exampleFormControlSelect2">
@@ -47,13 +44,6 @@
                   <option>5</option>
                 </select>
             </div>
-            <!-- <select class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <option><a href="#">1 (Strongly Disagree)</a></option>
-                <option><a href="#">2</a></option>
-                <option>3</option>
-                <option><a href="#">4</a></option>
-                <option><a href="#">5 (Strongly Agree)</a></option>
-            </select> -->
         </div>
         <h2>Question 2</h2>
         <p>You like to read.</p>
@@ -209,7 +199,14 @@
             </div>
         </div>
     </div>
+    <!-- Links to the API friends list and the github repo -->
+    <footer class="footer">
+        <div class="container">
+            <p><a href="/api/friends">API Friends List</a> | <a href="https://github.com/folaakingbe/FriendFinder">Github Repo</a></p>
+        </div>
+    </footer>
     <script>
+        // Obtain answers to the survey
         var score = [1,1,1,1,1,1,1,1,1,1];
         $(document).ready(function() {
         $("#question1").change(function (event) {
@@ -262,18 +259,18 @@
             var selectedText = $(this).find("option:selected").text();
             score[9] = parseInt(selectedText);
         })
+        // Send answers of survey to repo
         $(".submit").on("click", function(event) {
             event.preventDefault();
             var filled = true;
             for (var i = 0; i < score.length; i++) {
-                if (score[i] === "") {
+                if ($("#user-name").val() === "" || $("#user-photo").val() === "") {
                     filled = false;
                 }
                 else {
                     score[i] = parseInt(score[i]);
                 }
             }
-            console.log(score[5]);
             if (filled) {
                 var friend = {
                     name: $("#user-name").val(),
@@ -284,41 +281,16 @@
                 console.log(Object.getOwnPropertyNames(friend));
                 console.log("-------------------------");
                 $.post("/api/friends", friend, function(data) {
-                    console.log("here");
                     document.getElementById("friend-name").innerHTML = data.name;
                     document.getElementById("friend-photo").src = data.photo;
-                    console.log(data.photo);
                     $("#myModal").modal('show');
                 })
             }
+            else {
+                alert("Please fill out the name and link to photo image.")
+            }
             console.log(score);
         })
-
-        // function compatibility() {
-        //     var filled = true;
-        //     for (var i = 0; i < score.length; i++) {
-        //         if (score[i] === "") {
-        //             filled = false;
-        //         }
-        //         else {
-        //             score[i] = parseInt(score[i]);
-        //         }
-        //     }
-        //     if (filled) {
-        //         var friend = {
-        //             name: $("#user-name").val(),
-        //             photo: $("#user-photo").val(),
-        //             score: score
-        //         };
-        //         console.log(friend);
-        //         $.post("/api/friends", friend, function(data) {
-        //             console.log("here");
-        //             document.getElementById("friend-name").innerHTML = data.name;
-        //             document.getElementById("friend-photo").href = data.photo;
-        //             $("#myModal").modal('show');
-        //         })
-        //     }
-        // }
     })
     </script>
 </body>
